@@ -1,1 +1,56 @@
+#include &lt;stdio.h&gt;
 
+int main()
+{
+int year, month, day, i;
+int total = 0; /* days passed since 1 Jan of year 1 */
+int start; /* weekday of the 1st: 0 = Sun ... 6 = Sat */
+int days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+char *names[] = {&quot;January&quot;, &quot;February&quot;, &quot;March&quot;, &quot;April&quot;, &quot;May&quot;, &quot;June&quot;,
+&quot;July&quot;, &quot;August&quot;, &quot;September&quot;, &quot;October&quot;, &quot;November&quot;, &quot;December&quot;};
+
+printf(&quot;Enter the year: &quot;);
+scanf(&quot;%d&quot;, &amp;year);
+
+/* Step 1: if leap year, February has 29 days */
+if ((year % 4 == 0 &amp;&amp; year % 100 != 0) || (year % 400 == 0))
+days[1] = 29;
+
+/* Step 2: count the days in all the years before this year */
+for (i = 1; i &lt; year; i++)
+{
+
+if ((i % 4 == 0 &amp;&amp; i % 100 != 0) || (i % 400 == 0))
+total = total + 366;
+else
+total = total + 365;
+}
+
+/* Step 3: 1 Jan of year 1 was a Monday, so add 1 and take the remainder by 7 */
+start = (total + 1) % 7;
+
+/* Step 4: print every month */
+for (month = 0; month &lt; 12; month++)
+{
+printf(&quot;\n %s %d\n&quot;, names[month], year);
+printf(&quot; Su Mo Tu We Th Fr Sa\n&quot;);
+
+for (i = 0; i &lt; start; i++) /* blank spaces before the 1st */
+printf(&quot; &quot;);
+
+for (day = 1; day &lt;= days[month]; day++)
+{
+printf(&quot;%4d&quot;, day);
+start++;
+if (start == 7) /* Saturday finished, go to next line */
+{
+printf(&quot;\n&quot;);
+start = 0;
+}
+}
+if (start != 0)
+printf(&quot;\n&quot;);
+}
+
+return 0;
+}
